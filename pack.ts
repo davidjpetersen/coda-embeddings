@@ -149,3 +149,37 @@ pack.addFormula({
     return JSON.stringify(result);
   },
 });
+
+pack.addFormula({
+  name: "CosineSimilarity",
+  description: "Compute the cosine similarity between two embedding arrays.",
+  parameters: [
+    coda.makeParameter({
+      type: coda.ParameterType.NumberArray,
+      name: "embeddingA",
+      description: "First embedding.",
+    }),
+    coda.makeParameter({
+      type: coda.ParameterType.NumberArray,
+      name: "embeddingB",
+      description: "Second embedding.",
+    }),
+  ],
+  resultType: coda.ValueType.Number,
+  execute: async function ([embeddingA, embeddingB], context) {
+    if (embeddingA.length !== embeddingB.length) {
+      throw new Error("Both embeddings must be of the same length.");
+    }
+    let dotProduct = 0;
+    let normA = 0;
+    let normB = 0;
+    for (let i = 0; i < embeddingA.length; i++) {
+      dotProduct += embeddingA[i] * embeddingB[i];
+      normA += embeddingA[i] * embeddingA[i];
+      normB += embeddingB[i] * embeddingB[i];
+    }
+    if (normA === 0 || normB === 0) return 0;
+    return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+  },
+});
+
