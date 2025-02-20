@@ -182,4 +182,3 @@ pack.addFormula({
     return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
   },
 });
-
